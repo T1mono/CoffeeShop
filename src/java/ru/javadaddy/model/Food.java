@@ -1,15 +1,10 @@
 package ru.javadaddy.model;
 
-import java.util.Optional;
-
-public class Drink implements MenuItem {
+public class Food implements MenuItem {
 
     private String name;
 
-   private double price;
-
-   private double volume;
-
+    private double price;
 
     @Override
     public String getName() {
@@ -18,6 +13,6 @@ public class Drink implements MenuItem {
 
     @Override
     public double getPrice() {
-        return this.volume;
+        return this.price;
     }
 }

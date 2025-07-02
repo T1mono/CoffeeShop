@@ -1,6 +1,6 @@
 package ru.javadaddy.model;
 
-public interface MenuInterface {
+public interface MenuItem {
     String getName();
 
     double getPrice();
