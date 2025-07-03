@@ -11,6 +11,10 @@ public class OrderService {
 
     //TODO: Добавление товара в заказ
     public void addItem (MenuItem menuItem) {
+        if (menuItem == null) {
+            throw new IllegalArgumentException("Товар не может быть null");
+        }
+
 
     }
 }
