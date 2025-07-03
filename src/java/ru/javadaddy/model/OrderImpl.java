@@ -1,5 +1,7 @@
 package ru.javadaddy.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -15,19 +17,19 @@ public class OrderImpl implements Order {
             throw new IllegalArgumentException("Товар в заказе не может быть null");
         }
 
-        Optional<MenuItem> menuItemStream = items.stream()
-                .filter(i -> i.getName().equals(item.getName()))
-                .findFirst();
-
-        if (menuItemStream.isPresent()) {
+        if (!items.contains(item)) {
             items.add(item);
         }
-
     }
 
     @Override
     public List<MenuItem> getItems() {
-        return this.items;
+
+        if (items == null || items.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return new ArrayList<>(items);
     }
 
     @Override
