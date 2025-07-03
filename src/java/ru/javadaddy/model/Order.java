@@ -2,23 +2,10 @@ package ru.javadaddy.model;
 
 import java.util.List;
 
-public class Order {
+public interface Order {
+    void addItem(MenuItem item);
 
-    private List<MenuItem> items;
+    List<MenuItem> getItems();
 
-    public void addItem(MenuItem item) {
-        items.add(item);
-    }
-
-    public List<MenuItem> getItems() {
-        return this.items;
-    }
-
-    public double getTotalPrice() {
-        double totalPrice = 0;
-        for (MenuItem item : items) {
-            totalPrice += item.getPrice();
-        }
-        return totalPrice;
-    }
+    double getTotalPrice();
 }
