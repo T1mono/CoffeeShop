@@ -11,4 +11,12 @@ public enum PromoCode {
         this.code = code;
         this.discountValue = discountValue;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public double getDiscountValue() {
+        return discountValue;
+    }
 }

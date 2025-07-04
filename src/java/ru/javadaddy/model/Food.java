@@ -28,6 +28,10 @@ public class Food implements MenuItem {
         this.calories = calories;
     }
 
+    public double getCalories() {
+        return calories;
+    }
+
     @Override
     public String getName() {
         return this.name;
