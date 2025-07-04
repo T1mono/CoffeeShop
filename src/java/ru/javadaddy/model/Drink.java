@@ -40,7 +40,7 @@ public class Drink implements MenuItem {
 
     @Override
     public double getPrice() {
-        return this.volume;
+        return this.price;
     }
 
     @Override

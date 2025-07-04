@@ -1,7 +1,7 @@
 package ru.javadaddy.enums;
 
 public enum PromoCode {
-    WELCOME10("WOLCOME10", 100);
+    WELCOME10("WELCOME10", 100);
 
     private final String code;
 

@@ -1,5 +1,6 @@
 package ru.javadaddy.cli;
 
+import ru.javadaddy.enums.PromoCode;
 import ru.javadaddy.model.Drink;
 import ru.javadaddy.model.Food;
 import ru.javadaddy.model.MenuItem;
@@ -9,12 +10,11 @@ import ru.javadaddy.service.OrderServiceImpl;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
-
 public class CafeApp {
     private final Scanner scanner;
     private final OrderService orderService;
     private final List<MenuItem> menu;
+    private PromoCode appliedPromo;
 
     public CafeApp() {
         this.scanner = new Scanner(System.in);
@@ -49,32 +49,79 @@ public class CafeApp {
         }
     }
 
+    private void checkout() {
+        if (orderService.findItems().isEmpty()) {
+            System.out.println("\nСписок пуст");
+        }
+
+        viewCurrentOrder();
+        System.out.println("\nСпасибо за заказ! Приятного аппетита!");
+        System.exit(0);
+    }
+
+    private void applyPromocode() {
+        System.out.println("\nДоступные промокоды:");
+        System.out.println("- WELCOME10 (100 руб.)");
+
+        System.out.println("Введите промокод");
+        String input = scanner.nextLine().trim();
+
+        if (input.equalsIgnoreCase("WELCOME10")) {
+            appliedPromo = PromoCode.WELCOME10;
+            System.out.println("Скидка 100 руб. применена!");
+        } else {
+            System.out.println("Неверный промокод!");
+        }
+    }
+
+    private void viewCurrentOrder() {
+        List<MenuItem> items = orderService.findItems();
+        if (items.isEmpty()) {
+            System.out.println("Ваш заказ пуст!");
+        }
+
+        System.out.println("===Ваш заказ===");
+        items.forEach(item ->
+                System.out.printf("- %s (%.2f руб.)\n", item.getName(), item.getPrice())
+        );
+
+        System.out.printf("Итого: %.2f руб.\n", orderService.calculateTotalPrice());
+    }
+
     private void addItemToOrder() {
         showMenu();
         System.out.println("\nВыбирете номера товара: ");
         int itemNumber = readIntInput();
 
-        if(itemNumber < 1 || itemNumber > menu.size()) {
+        if (itemNumber < 1 || itemNumber > menu.size()) {
             System.out.println("Неверный номер товара");
+            return;
         }
+
+        MenuItem selectedItem = menu.get(itemNumber - 1);
+        orderService.addItem(selectedItem);
+        System.out.printf("\nДобавлено: %s (%.2f руб.)\n",
+                selectedItem.getName(), selectedItem.getPrice());
     }
+
 
     private void showMenu() {
         System.out.println("\n=== МЕНЮ ===");
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.get(i);
-            String template = "%d. %s - %.2f руб. %s";
 
-            String details = "";
+            StringBuilder sb = new StringBuilder()
+                    .append(i + 1).append(". ")
+                    .append(item.getName()).append(" - ")
+                    .append(String.format("%.2f руб.", item.getPrice()));
+
             if (item instanceof Drink) {
-                details = String.format("(%.1f л)", ((Drink) item).getVolume());
+                sb.append(" (").append(((Drink) item).getVolume()).append(" л)");
             } else if (item instanceof Food) {
-                details = String.format("(%d г)", ((Food) item).getCalories());
+                sb.append(" (").append(((Food) item).getCalories()).append(" ккал)");
             }
 
-            System.out.println(
-                    String.format(template, i + 1, item.getName(), item.getPrice(), details)
-            );
+            System.out.println(sb.toString());
         }
     }
 
@@ -104,5 +151,10 @@ public class CafeApp {
     private void printWelcomeMessage() {
         System.out.println("Добро пожаловать в CafeApp!");
         System.out.println("-----------------------------");
+    }
+
+    public static void main(String[] args) {
+        CafeApp cafeApp = new CafeApp();
+        cafeApp.run();
     }
 }
